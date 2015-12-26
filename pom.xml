@@ -107,6 +107,11 @@
 			<version>2.6.4</version>
 		</dependency>
 		<!-- end of vaadin charts dependencies -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>2.48.2</version>
+		</dependency>
 
 	</dependencies>
 
