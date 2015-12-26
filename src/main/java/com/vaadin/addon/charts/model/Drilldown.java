@@ -4,7 +4,7 @@ package com.vaadin.addon.charts.model;
  * #%L
  * Vaadin Charts
  * %%
- * Copyright (C) 2014 Vaadin Ltd
+ * Copyright (C) 2012 - 2015 Vaadin Ltd
  * %%
  * This program is available under Commercial Vaadin Add-On License 3.0
  * (CVALv3).
@@ -17,158 +17,171 @@ package com.vaadin.addon.charts.model;
  * #L%
  */
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vaadin.addon.charts.model.style.Style;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
+ * <p>
  * Options for drill down, the concept of inspecting increasingly high
  * resolution data through clicking on chart items like columns or pie slices.
+ * </p>
+ * 
+ * <p>
+ * The drilldown feature requires the <code>drilldown.js</code> file to be
+ * loaded, found in the <code>modules</code> directory of the download package,
+ * or online at <a
+ * href="http://code.highcharts.com/modules/drilldown.js">code.highcharts
+ * .com/modules/drilldown.js</a>.
+ * </p>
  */
 public class Drilldown extends AbstractConfigurationObject {
 
-    private Style activeAxisLabelStyle;
-    private Style activeDataLabelStyle;
-    private Object animation;
-    private DrillUpButton drillUpButton;
-    private List<Series> series = new ArrayList<Series>();
+	private static final long serialVersionUID = 1L;
+	private Style activeAxisLabelStyle;
+	private Style activeDataLabelStyle;
+	private Boolean allowPointDrilldown;
+	private Object animation;
+	private DrillUpButton drillUpButton;
+	private PlotOptionsSeries series;
 
-    @JsonIgnore
-    private Configuration configuration;
+	public Drilldown() {
+	}
 
-    /**
-     * Adds a series configurations for the drilldown. These drilldown series
-     * are hidden by default. The drilldown series is linked to the parent
-     * series' point by its {@link Series#getId()}
-     * 
-     * @param series
-     */
-    void addSeries(Series series) {
-        this.series.add(series);
-    }
+	/**
+	 * @see #setActiveAxisLabelStyle(Style)
+	 */
+	public Style getActiveAxisLabelStyle() {
+		return activeAxisLabelStyle;
+	}
 
-    /**
-     * Sets the configuration linked to the drilldown series.
-     * 
-     * @param configuration
-     */
-    public void setConfiguration(Configuration configuration) {
-        this.configuration = configuration;
-    }
+	/**
+	 * Additional styles to apply to the X axis label for a point that has
+	 * drilldown data. By default it is underlined and blue to invite to
+	 * interaction. Defaults to:
+	 * 
+	 * <pre>
+	 * activeAxisLabelStyle: {
+	 * 		cursor: 'pointer',
+	 * 		color: '#0d233a',
+	 * 		fontWeight: 'bold',
+	 * 		textDecoration: 'underline'			
+	 * 	}
+	 * </pre>
+	 */
+	public void setActiveAxisLabelStyle(Style activeAxisLabelStyle) {
+		this.activeAxisLabelStyle = activeAxisLabelStyle;
+	}
 
-    /**
-     * @see #setConfiguration(Configuration)
-     * @return the {@link Configuration} that this series is linked to.
-     */
-    public Configuration getConfiguration() {
-        return configuration;
-    }
+	/**
+	 * @see #setActiveDataLabelStyle(Style)
+	 */
+	public Style getActiveDataLabelStyle() {
+		return activeDataLabelStyle;
+	}
 
-    /**
-     * @see #setActiveAxisLabelStyle(Style)
-     * @return
-     */
-    public Style getActiveAxisLabelStyle() {
-        return activeAxisLabelStyle;
-    }
+	/**
+	 * Additional styles to apply to the data label of a point that has
+	 * drilldown data. By default it is underlined and blue to invite to
+	 * interaction. Defaults to:
+	 * 
+	 * <pre>
+	 * activeAxisLabelStyle: {
+	 * 		cursor: 'pointer',
+	 * 		color: '#0d233a',
+	 * 		fontWeight: 'bold',
+	 * 		textDecoration: 'underline'			
+	 * 	}
+	 * </pre>
+	 */
+	public void setActiveDataLabelStyle(Style activeDataLabelStyle) {
+		this.activeDataLabelStyle = activeDataLabelStyle;
+	}
 
-    /**
-     * Additional styles to apply to the X axis label for a point that has
-     * drilldown data.
-     * 
-     * @param activeAxisLabelStyle
-     */
-    public void setActiveAxisLabelStyle(Style activeAxisLabelStyle) {
-        this.activeAxisLabelStyle = activeAxisLabelStyle;
-    }
+	/**
+	 * @see #setAllowPointDrilldown(Boolean)
+	 */
+	public Boolean getAllowPointDrilldown() {
+		return allowPointDrilldown;
+	}
 
-    /**
-     * @see #setActiveDataLabelStyle(Style)
-     * @return
-     */
-    public Style getActiveDataLabelStyle() {
-        return activeDataLabelStyle;
-    }
+	/**
+	 * When this option is false, clicking a single point will drill down all
+	 * points in the same category, equivalent to clicking the X axis label.
+	 * <p>
+	 * Defaults to: true
+	 */
+	public void setAllowPointDrilldown(Boolean allowPointDrilldown) {
+		this.allowPointDrilldown = allowPointDrilldown;
+	}
 
-    /**
-     * Additional styles to apply to the data label of a point that has
-     * drilldown data.
-     * 
-     * @param activeDataLabelStyle
-     */
-    public void setActiveDataLabelStyle(Style activeDataLabelStyle) {
-        this.activeDataLabelStyle = activeDataLabelStyle;
-    }
+	/**
+	 * @see #setAnimation(Object)
+	 */
+	public Object getAnimation() {
+		return animation;
+	}
 
-    /**
-     * Checks if animation is set as a Boolean and if so, returns that setting.
-     * Otherwise returns <code>null</code>.
-     * 
-     * @see #setAnimation(Boolean)
-     * @return <code>null</code> when the animation is not set as Boolean,
-     *         otherwise a corresponding Boolean.
-     */
-    public Boolean isAnimation() {
-        return animation instanceof Boolean ? (Boolean) animation : null;
-    }
+	/**
+	 * <p>
+	 * Set the animation for all drilldown animations. Animation of a drilldown
+	 * occurs when drilling between a column point and a column series, or a pie
+	 * slice and a full pie series. Drilldown can still be used between series
+	 * and points of different types, but animation will not occur.
+	 * </p>
+	 * 
+	 * <p>
+	 * The animation can either be set as a boolean or a configuration object.
+	 * If <code>true</code>, it will use the 'swing' jQuery easing and a
+	 * duration of 500 ms. If used as a configuration object, the following
+	 * properties are supported:
+	 * </p>
+	 * <dl>
+	 * <dt>duration</dt>
+	 * <dd>The duration of the animation in milliseconds.</dd>
+	 * 
+	 * <dt>easing</dt>
+	 * <dd>When using jQuery as the general framework, the easing can be set to
+	 * <code>linear</code> or <code>swing</code>. More easing functions are
+	 * available with the use of jQuery plug-ins, most notably the jQuery UI
+	 * suite. See <a href="http://api.jquery.com/animate/">the jQuery docs</a>.
+	 * When using MooTools as the general framework, use the property name
+	 * <code>transition</code> instead of <code>easing</code>.</dd>
+	 * </dl>
+	 * <p>
+	 * Defaults to:
+	 */
+	public void setAnimation(Object animation) {
+		this.animation = animation;
+	}
 
-    /**
-     * Returns current animation settings. Can be a boolean (
-     * {@link #isAnimation()}), or an {@link Animation} instance.
-     * 
-     * @see #setAnimation(Boolean)
-     * @see #setAnimation(Animation)
-     * @return Current animation setting.
-     */
-    public Object getAnimation() {
-        return animation;
-    }
+	/**
+	 * @see #setDrillUpButton(DrillUpButton)
+	 */
+	public DrillUpButton getDrillUpButton() {
+		return drillUpButton;
+	}
 
-    /**
-     * Set the animation for all drilldown animations. Animation of a drilldown
-     * occurs when drilling between a column point and a column series, or a pie
-     * slice and a full pie series. Drilldown can still be used between series
-     * and points of different types, but animation will not occur.
-     * 
-     * @param animation
-     */
-    public void setAnimation(Animation animation) {
-        this.animation = animation;
-    }
+	/**
+	 * Options for the drill up button that appears when drilling down on a
+	 * series. The text for the button is defined in <a
+	 * href="#lang.drillUpText">lang.drillUpText</a>.
+	 */
+	public void setDrillUpButton(DrillUpButton drillUpButton) {
+		this.drillUpButton = drillUpButton;
+	}
 
-    /**
-     * Set the animation for all drilldown animations. Animation of a drilldown
-     * occurs when drilling between a column point and a column series, or a pie
-     * slice and a full pie series. Drilldown can still be used between series
-     * and points of different types, but animation will not occur.
-     * 
-     * @param animation
-     */
-    public void setAnimation(Boolean animation) {
-        this.animation = animation;
-    }
+	/**
+	 * @see #setSeries(PlotOptionsSeries)
+	 */
+	public PlotOptionsSeries getSeries() {
+		return series;
+	}
 
-    /**
-     * @see Drilldown#setDrillUpButton(DrillUpButton)
-     * @return
-     */
-    public DrillUpButton getDrillUpButton() {
-        if (drillUpButton == null) {
-            drillUpButton = new DrillUpButton();
-        }
-        return drillUpButton;
-    }
-
-    /**
-     * Options for the drill up button that appears when drilling down on a
-     * series. The text for the button is defined in
-     * {@link Lang#setDrillUpText(String)}.
-     * 
-     * @param drillUpButton
-     */
-    public void setDrillUpButton(DrillUpButton drillUpButton) {
-        this.drillUpButton = drillUpButton;
-    }
+	/**
+	 * An array of series configurations for the drill down. Each series
+	 * configuration uses the same syntax as the <a href="#series">series</a>
+	 * option set. These drilldown series are hidden by default. The drilldown
+	 * series is linked to the parent series' point by its <code>id</code>.
+	 */
+	public void setSeries(PlotOptionsSeries series) {
+		this.series = series;
+	}
 }

@@ -17,18 +17,17 @@ package com.vaadin.addon.charts.model;
  * #L%
  */
 /**
- * Options for the drill up button that appears when drilling down on a series.
- * The text for the button is defined in <a
- * href="#lang.drillUpText">lang.drillUpText</a>.
+ * The button that appears after a selection zoom, allowing the user to reset
+ * zoom.
  */
-public class DrillUpButton extends AbstractConfigurationObject {
+public class ResetZoomButton extends AbstractConfigurationObject {
 
 	private static final long serialVersionUID = 1L;
 	private Position position;
-	private DrillUpButtonRelativeTo relativeTo;
+	private ResetZoomButtonRelativeTo relativeTo;
 	private Object theme;
 
-	public DrillUpButton() {
+	public ResetZoomButton() {
 	}
 
 	/**
@@ -39,29 +38,28 @@ public class DrillUpButton extends AbstractConfigurationObject {
 	}
 
 	/**
-	 * Positioning options for the button within the <code>relativeTo</code>
-	 * box. Available properties are <code>x</code>, <code>y</code>,
-	 * <code>align</code> and <code>verticalAlign</code>.
-	 * <p>
-	 * Defaults to:
+	 * The position of the button. This is an object that can hold the
+	 * properties <code>align</code>, <code>verticalAlign</code>, <code>x</code>
+	 * and <code>y</code>.
 	 */
 	public void setPosition(Position position) {
 		this.position = position;
 	}
 
 	/**
-	 * @see #setRelativeTo(DrillUpButtonRelativeTo)
+	 * @see #setRelativeTo(ResetZoomButtonRelativeTo)
 	 */
-	public DrillUpButtonRelativeTo getRelativeTo() {
+	public ResetZoomButtonRelativeTo getRelativeTo() {
 		return relativeTo;
 	}
 
 	/**
-	 * What box to align the button to. Can be either "plotBox" or "spacingBox".
+	 * What frame the button should be placed related to. Can be either "plot"
+	 * or "chart".
 	 * <p>
-	 * Defaults to: plotBox
+	 * Defaults to: plot
 	 */
-	public void setRelativeTo(DrillUpButtonRelativeTo relativeTo) {
+	public void setRelativeTo(ResetZoomButtonRelativeTo relativeTo) {
 		this.relativeTo = relativeTo;
 	}
 
@@ -79,8 +77,6 @@ public class DrillUpButton extends AbstractConfigurationObject {
 	 * also supports <code>style</code>, a collection of CSS properties for the
 	 * text. Equivalent attributes for the hover state are given in
 	 * <code>theme.states.hover</code>.
-	 * <p>
-	 * Defaults to:
 	 */
 	public void setTheme(Object theme) {
 		this.theme = theme;
